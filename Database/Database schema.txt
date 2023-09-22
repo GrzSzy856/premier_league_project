@@ -1,0 +1,97 @@
+Table Matches {
+  match_id integer [primary key]
+  match_date date
+  match_time time
+  home_team_id integer
+  away_team_id integer
+  home_team_goals tinyint
+  away_team_goals tinyint
+  referee_id integer
+  matchday_number tinyint
+  
+}
+
+Table TeamMatchStats {
+  match_id integer
+  club_id integer
+  is_home bit //1-home, 0-away
+  shots_on_goal tinyint
+  total_shots tinyint
+  fouls tinyint
+  corner_kicks tinyint
+  ball_possession tinyint
+  yellow_cards tinyint
+  red_cards tiny_int
+  expected_goals float
+}
+
+
+Table Players {
+  player_id integer [primary key]
+  club_id integer
+  player_name varchar(50)
+  player_surname varchar(50)
+  nationality varchar(50)
+  position char(2)
+  birth_date date
+  contract_expiration date
+  height tinyint
+  batter_foot char
+  market_value_in_m_eur float
+}
+
+Table Clubs {
+  club_id integer [primary key]
+  stadium_id integer 
+  manager_id integer
+  club_name varchar(50)
+  name_abbreviation char(3) 
+  
+}
+
+Table PlayerAttributes {
+player_id integer 
+pace tinyint //check constraint 0-99
+shooting tinyint //check constraint 0-99
+passing tinyint //check constraint 0-99
+dribbling tinyint //check constraint 0-99
+defending tinyint //check constraint 0-99
+physicality tinyint //check constraint 0-99
+
+}
+
+Table Referees{
+referee_id integer [primary key]
+referee_name varchar(50)
+referee_surname varchar(50)
+}
+
+
+Table Stadiums {
+stadium_id integer [primary key]
+stadium_name varchar(60)
+city varchar(50)
+capacity integer
+
+}
+
+Table Managers {
+manager_id integer [primary key]
+manager_name varchar(50)
+manager_surname varchar(50)
+nationality varchar(30)
+birth_date date
+appointment_date date
+
+
+}
+
+Ref: Clubs.club_id < Players.club_id
+Ref: Clubs.manager_id - Managers.manager_id  // many-to-one
+Ref: Clubs.club_id < Matches.home_team_id
+Ref: Clubs.club_id < Matches.away_team_id
+Ref: Clubs.stadium_id < Stadiums.stadium_id
+Ref: Referees.referee_id < Matches.referee_id
+Ref: Players.player_id - PlayerAttributes.player_id
+Ref: TeamMatchStats.match_id > Matches.match_id
+Ref: TeamMatchStats.club_id > Clubs.club_id
